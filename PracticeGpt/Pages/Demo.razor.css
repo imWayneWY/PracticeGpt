@@ -1,0 +1,7 @@
+﻿body {
+}
+@media (min-width: 641px) {
+    .wrapper {
+        height: calc(100vh - 4.6rem);
+    }
+}

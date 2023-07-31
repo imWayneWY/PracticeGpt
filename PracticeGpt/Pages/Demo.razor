@@ -1,0 +1,58 @@
+﻿@page "/demo"
+@using System;
+@using System.Collections;
+@using PracticeGpt.Data;
+@inject BingWebSearchService BingWebSearchService;
+@inject GptService GptService;
+
+<PageTitle>Demo</PageTitle>
+<div class="wrapper">
+    <h1>Demo</h1>
+
+    <div class="container text-container">
+        <form class="input-group mb-3" @onsubmit="AddChat">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Enter your question"
+                   aria-label="Enter your question"
+                   @bind="inputValue">
+            <button class="btn btn-outline-secondary"
+                    type="submit"
+                    id="enter-button">
+                Enter
+            </button>
+        </form>
+        @foreach (var chat in chatList)
+        {
+            <div>@chat.ChatContent</div>
+        }
+    </div>
+</div>
+
+
+@code {
+    private List<Chat> chatList = new List<Chat>();
+    private string? inputValue;
+    private void AddChat()
+    {
+        if (inputValue == null || inputValue == "")
+        {
+            return;
+        }
+        var bingWebSearchService = BingWebSearchService.Search(inputValue);
+        var response = GptService.Chat(inputValue);
+        chatList.Add(new Chat
+        {
+            ChatContent = response,
+            Time = DateTime.Now,
+            authorType = ChatAuthorType.Gpt,
+        });
+        chatList.Add(new Chat {
+            ChatContent = inputValue,
+            Time = DateTime.Now,
+            authorType = ChatAuthorType.User
+        });
+        inputValue = "";
+    }
+}
+
