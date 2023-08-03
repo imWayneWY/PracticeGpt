@@ -7,5 +7,4 @@ public class BingWebSearchResult
 	public string Name { get; set; }
 	public string Url { get;set; }
 	public string Snippet { get; set; }
-	public bool IsNavigational { get; set; }
 }

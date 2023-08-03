@@ -5,9 +5,9 @@
 @inject BingWebSearchService BingWebSearchService;
 @inject GptService GptService;
 
-<PageTitle>Demo</PageTitle>
+<PageTitle>Not that new Bing</PageTitle>
 <div class="wrapper">
-    <h1>Demo</h1>
+    <h1>Not that new Bing</h1>
 
     <div class="container text-container">
         <form class="input-group mb-3" @onsubmit="AddChat">
@@ -18,41 +18,59 @@
                    @bind="inputValue">
             <button class="btn btn-outline-secondary"
                     type="submit"
+                    disabled=@isLoading
                     id="enter-button">
                 Enter
             </button>
         </form>
-        @foreach (var chat in chatList)
-        {
-            <div>@chat.ChatContent</div>
-        }
+        <div class="d-flex flex-column">
+            @foreach (var chat in chatList)
+            {
+                <ChatBubble Context="@chat.ChatContent" AuthorType="@chat.authorType" />
+            }
+        </div>
     </div>
 </div>
 
-
 @code {
+    private bool isLoading = false;
     private List<Chat> chatList = new List<Chat>();
     private string? inputValue;
-    private void AddChat()
+    private async void AddChat()
     {
         if (inputValue == null || inputValue == "")
         {
             return;
         }
-        var bingWebSearchService = BingWebSearchService.Search(inputValue);
-        var response = GptService.Chat(inputValue);
+        isLoading = true;
+        StateHasChanged();
+        chatList.Add(new Chat
+        {
+            ChatContent = inputValue,
+            Time = DateTime.Now,
+            authorType = ChatAuthorType.User,
+        });
+        StateHasChanged();
+        var keywords = GptService.ExtractKeywords(inputValue);
+        inputValue = "";
+        StateHasChanged();
+        chatList.Add(new Chat
+        {
+            ChatContent = "Searching for" + keywords,
+            Time = DateTime.Now,
+            authorType = ChatAuthorType.System,
+        });
+        StateHasChanged();
+        var bingWebSearchResult = BingWebSearchService.Search(keywords);
+        var response = await GptService.Chat(inputValue, bingWebSearchResult);
         chatList.Add(new Chat
         {
             ChatContent = response,
             Time = DateTime.Now,
             authorType = ChatAuthorType.Gpt,
         });
-        chatList.Add(new Chat {
-            ChatContent = inputValue,
-            Time = DateTime.Now,
-            authorType = ChatAuthorType.User
-        });
-        inputValue = "";
+        StateHasChanged();
+        isLoading = false;
     }
 }
 

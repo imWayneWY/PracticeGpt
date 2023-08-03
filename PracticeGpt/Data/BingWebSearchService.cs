@@ -56,7 +56,6 @@ namespace PracticeGpt.Data
                         Name = result.name,
                         Url = result.url,
                         Snippet = result.snippet,
-                        IsNavigational = result.isNavigational
                     }
                 );
             }

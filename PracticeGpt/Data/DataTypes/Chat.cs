@@ -4,7 +4,8 @@ namespace PracticeGpt.Data;
 public enum ChatAuthorType
 {
     Gpt,
-    User
+    User,
+    System,
 }
 public class Chat
 {

@@ -7,6 +7,13 @@
     <UserSecretsId>aspnet-PracticeGpt-1ec7536f-bccc-4a3a-bd2f-64e468006482</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>11.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <LangVersion>11.0</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Data\DataTypes\" />
   </ItemGroup>
@@ -23,6 +30,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.16" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Markdig" Version="0.31.0" />
   </ItemGroup>
 
   <ItemGroup>
