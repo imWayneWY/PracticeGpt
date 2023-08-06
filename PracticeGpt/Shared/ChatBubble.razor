@@ -1,7 +1,9 @@
 ﻿@using PracticeGpt.Data;
 @using Markdig;
 
-<blockquote class="blockquote col-auto col rounded-3 bg-gradient p-2 @(AuthorType == ChatAuthorType.User ? "align-self-end bg-primary" : "align-self-start bg-light")">
+<blockquote class="blockquote col-auto col rounded-3 bg-gradient p-2
+            @(AuthorType == ChatAuthorType.User ? "align-self-end bg-primary" : "align-self-start bg-light")
+            @(AuthorType == ChatAuthorType.System ? "fs-6 bg-transparent" : "")">
     @((MarkupString)Markdig.Markdown.ToHtml(Context))
 </blockquote>
 

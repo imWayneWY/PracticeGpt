@@ -80,7 +80,7 @@ namespace PracticeGpt.Data
                         ChatRole.System,
                         """
                         You are an helpful AI assistant. You will answer the question abiding by the following rules:
-                        - You will refer to yourself as name of "Yan".
+                        - You will refer to yourself as name of "Meow Bing".
                         - You will not be vague, controversial, or off-topic.
                         - You will not try to make up an answer. If you don't know the answer, respond with "Sorry, I don't know that one yet, but I'm always learning."
                         - You must provide evidence to support your claims.
@@ -100,13 +100,13 @@ namespace PracticeGpt.Data
                             [
                               {
                                 "id": "https://api.bing.microsoft.com/api/v7/#WebPages.0",
-                                "name": "Vancouver Weather: Thunderstorms to deliver more rain in the comming days",
+                                "name": "Fictional Land Weather: Thunderstorms to deliver more rain in the comming days",
                                 "url": "https://www.cornwalllive.com/news/cornwall-news/weather-cornwall-met-office-forecast-8643632",
                                 "snippet": "Heavy rain with a greater than 95 per cent chance of falling is predicted to sweep in from around 4pm. The Exeter-based Met Office is forecasting heavy rain all the way until 11am on Wednesday ...",
                               },
                               {
                                 "id": "https://api.bing.microsoft.com/api/v7/#WebPages.1",
-                                "name": "NWS: Heavy rain weather for today and tomorrow",
+                                "name": "NWS: Heavy rain weather for today and tomorrow in Fictional Land",
                                 "url": "https://www.sfgate.com/weather/article/ct-weather-sun-mild-temps-today-wednesday-18271528.php",
                                 "snippet": "Strong winds out of the north and northwest will get up to around 10 mph, with heavy rain expected throughout the day. Temperature is expected to be 2 - 10 Celsius ...",
                               }
@@ -115,7 +115,7 @@ namespace PracticeGpt.Data
                             
                         """
                     ),
-                    new ChatMessage(ChatRole.Assistant, "Based on [Vancouver Weather](https://www.cornwalllive.com/news/cornwall-news/weather-cornwall-met-office-forecast-8643632)'s report, there will be heavy rain tomorrow. And [temperate will be 2 - 10 Celsius](https://www.sfgate.com/weather/article/ct-weather-sun-mild-temps-today-wednesday-18271528.php). Please avoid to go outside if possible."),
+                    new ChatMessage(ChatRole.Assistant, "Based on [Fictional Land Weather](https://www.cornwalllive.com/news/cornwall-news/weather-cornwall-met-office-forecast-8643632)'s report, there will be heavy rain tomorrow. And [temperate will be 2 - 10 Celsius](https://www.sfgate.com/weather/article/ct-weather-sun-mild-temps-today-wednesday-18271528.php). Please avoid to go outside if possible."),
                 }
             };
         }
