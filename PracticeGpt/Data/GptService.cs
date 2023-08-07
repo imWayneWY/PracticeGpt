@@ -23,22 +23,26 @@ namespace PracticeGpt.Data
             );
             ResetChatCompletionsOptions();
         }
-        public async Task<string> Chat(string prompt, IList<BingWebSearchResult> bingWebSearchResults)
+        public async Task<string> Chat(string query, IList<BingWebSearchResult> bingWebSearchResults = null)
         {
             var webInfos = JsonSerializer.Serialize(bingWebSearchResults);
-            
-            _chatCompletionsOptions.Messages.Add(new ChatMessage(ChatRole.User, prompt));
-            _chatCompletionsOptions.Messages.Add(
-                new ChatMessage
-                (
-                    ChatRole.System,
-                    @$"Your answer should be based on the following infomation.
+
+            _chatCompletionsOptions.Messages.Add(new ChatMessage(ChatRole.User, query));
+            if (bingWebSearchResults != null)
+            {
+                _chatCompletionsOptions.Messages.Add(
+                    new ChatMessage
+                    (
+                        ChatRole.System,
+                        @$"Your answer should be based on the following infomation.
                         Information:
                         ``````
                         {webInfos}
                         ``````
-                ")
-            );
+                    ")
+                );
+
+            }
 
             Response<StreamingChatCompletions> response = await _client.GetChatCompletionsStreamingAsync(_gpt3, _chatCompletionsOptions);
             var gptResponse = new StringBuilder();
@@ -54,21 +58,52 @@ namespace PracticeGpt.Data
             }
             return gptResponse.ToString();
         }
-        public string ExtractKeywords(string prompt)
+        public string ExtractKeywords(string query)
         {
             string extractionPrompt = @$"
                 Extract 3 or 4 keywords from the following text.
 
                 Text:
                 """"""
-                {prompt}
+                {query}
                 """"""
 
                 Keywords:
             ";
+            var completionsOptions = new CompletionsOptions()
+            {
+                Prompts = { extractionPrompt },
+                MaxTokens = 2,
+            };
             Response<Completions> completionsResponse = _client.GetCompletions(_text3, extractionPrompt);
             string completion = completionsResponse.Value.Choices[0].Text;
             return completion;
+        }
+        public bool NeedWebSearch(string query)
+        {
+            string needWebSearchPrompt = @$"
+                You are an AI process to judge if internet access is needed to answer the Question.
+                If the question is about you, for example, your name, your feeling, or just greeting, say NO.
+                Otherwise, say YES.
+                You should only say 1 word which is either YES or NO.
+
+                
+                Question:
+                """"""
+                {query}
+                """"""
+
+                You: 
+            ";
+            var completionsOptions = new CompletionsOptions()
+            {
+                Prompts = { needWebSearchPrompt },
+                MaxTokens = 1,
+                Temperature = 0,
+            };
+            Response<Completions> completionsResponse = _client.GetCompletions(_gpt3, completionsOptions);
+            string completion = completionsResponse.Value.Choices[0].Text;
+            return completion.IndexOf("YES", StringComparison.OrdinalIgnoreCase) >= 0; ;
         }
         public void ResetChatCompletionsOptions()
         {
